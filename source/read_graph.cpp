@@ -1,33 +1,32 @@
 #include "read_graph.h"
+#include <iostream>
 #include <cstdlib>
 #include <fstream>
 #include <sstream>
 
 
-Graph parse_dimacs(std::ifstream& file);
-Graph parse_dimacs_header(std::string line);
-Graph parse_dimacs_edge(std::string line, Graph graph);
-void add_edge(Node* head, int vertex);
+Graph read_dimacs(std::string filename) {
 
-Graph read_dimacs(std::string &filename) {
-    std::ifstream file("example.dimacs");
-    Graph graph = parse_dimacs(file);
-    return graph;
-}
+    std::ifstream file(filename);
+    std::cout<<"Reading file: "<<filename<<std::endl;
 
-
-Graph parse_dimacs(std::ifstream& file) {
     Graph graph;
-    std::string line;
-    while (std::getline(file, line)) {
+
+    for (std::string line; std::getline(file, line); )  {
+        std::cout << "Parsing line: " << line << std::endl;
+
         if (line[0] == 'c') {
+            std::cout << "Skipping comment: " << line << std::endl;
             continue;
         } else if (line[0] == 'p') {
+            std::cout << "Parsing header: " << line << std::endl;
             graph = parse_dimacs_header(line);
         } else {
-            graph = parse_dimacs_edge(line, graph);
+            std::cout << "Parsing edge: " << line << std::endl;
+            parse_dimacs_edge(line, graph);
         }
     }
+    std::cout << "Done parsing file" << std::endl;
     return graph;
 }
 
@@ -46,28 +45,33 @@ Graph parse_dimacs_header(std::string line) {
     return graph;
 }
 
-Graph parse_dimacs_edge(std::string line, Graph graph){
+void parse_dimacs_edge(std::string line, Graph &graph){
     std::istringstream iss(line);
     std::string word;
     iss >> word;  // Skip the first word "e"
-    int vertex1 = std::stoi(word);
     iss >> word;
-    int vertex2 = std::stoi(word);
-    add_edge(graph.adjacency_list[vertex1], vertex2);
-    add_edge(graph.adjacency_list[vertex2], vertex1);
-    return graph;
+    std::cout << word << std::endl;
+    int vertex1 = std::stoi(word) - 1;
+    iss >> word;
+    int vertex2 = std::stoi(word) - 1;
+    graph.adjacency_list[vertex1] = add_edge(graph.adjacency_list[vertex1], vertex2);
+    graph.adjacency_list[vertex2] = add_edge(graph.adjacency_list[vertex2], vertex1);
 }
 
-void add_edge(Node* head, int vertex) {
-    Node* new_node = new Node;
+Node* add_edge(Node* head, int vertex) {
     
-    Node **temp = &head;
-    Node *current = head;
+    
+
+    if (head == NULL) {
+        head = new Node{vertex, NULL};
+        return head;
+    }
+
+    Node* current = head;
     while (current->next != NULL) {
-        temp = &current->next;
         current = current->next;
     }
-    new_node->vertex = vertex;
-    new_node->next = NULL;
-    current->next = new_node;
+    current->next = new Node{vertex, NULL};
+
+    return head;
 }
