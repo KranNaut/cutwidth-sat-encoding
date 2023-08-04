@@ -5,19 +5,26 @@
 
 
 void create_encoding(Graph &graph) {
-    std::string clause = "";
+    std::string transitive_clause = "";
+    std::string anti_reflixive_clause = "";
     
     for(int i = 1; i <= graph.num_vertices; i++){
         for(int j = 1; j <= graph.num_vertices; j++){
-            for(int k = 1; k <= graph.num_vertices; k++){
+            for(int k = j + 1; k <= graph.num_vertices; k++){
                 if(j != k && j != i && k != i){
-                  clause += "-" + std::to_string(i) + " -" + std::to_string(j) + " " + std::to_string(k) + " 0\n";
+                  transitive_clause += "-O" + std::to_string(j) + std::to_string(k) + " -O"  + std::to_string(k) + std::to_string(i) + " O" + std::to_string(j)+ std::to_string(i) + " 0\n";
                 }
             }
         }
     }
+    for(int j = 1; j <= graph.num_vertices; j++){
+        for(int k = j + 1; k <= graph.num_vertices; k++){
+            if(j != k){
+                anti_reflixive_clause += "-O" + std::to_string(j) + std::to_string(k) + " -O"  + std::to_string(k) + std::to_string(j) + " 0\n";
+            }
+        }
+    }
 
-    if(clause == "") std::cout << "Empty clause" << std::endl;
-    else   
-    std::cout << clause << std::endl;
+      
+    std::cout << anti_reflixive_clause << std::endl;
 }
