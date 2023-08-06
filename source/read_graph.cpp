@@ -77,3 +77,40 @@ Node* add_edge(Node* head, int vertex) {
 
     return head;
 }
+
+Node* remove_edge(Node* head, int vertex){
+    Node* current = head;
+
+    if (current == NULL) {
+        return NULL;
+    }
+    else if (current->vertex == vertex) {
+        Node* temp = current;
+        current = current->next;
+        delete temp;
+        return current;
+    }
+    else {
+        while (current->next != NULL) {
+            if (current->next->vertex == vertex) {
+                Node* temp = current->next->next;
+                delete current->next;
+                current->next = temp;
+                return head;
+            }
+            current = current->next;
+        }
+        return head;
+    }
+}
+
+bool check_edge(Graph &graph, int vertex1, int vertex2){
+    Node* current = graph.adjacency_list[vertex1];
+    while (current != NULL) {
+        if (current->vertex == vertex2) {
+            return true;
+        }
+        current = current->next;
+    }
+    return false;
+}

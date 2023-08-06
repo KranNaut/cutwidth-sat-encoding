@@ -10,9 +10,13 @@ int main()
     std::cout << "Number of vertice: " << inputGraph.num_vertices << std::endl;
     std::cout << "Number of edges: " << inputGraph.num_edges << std::endl;
     
-    create_encoding(inputGraph);
+    create_encoding(inputGraph,1);
     
+    
+
     std::cout<< "Done~~~~~~~~" << std::endl;
+
+
     
     return 0;
 }

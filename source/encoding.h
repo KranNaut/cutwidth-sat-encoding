@@ -6,8 +6,8 @@
 
 
 
-void create_encoding(Graph &inputGraph);
-void write_encoding();
+void create_encoding(Graph &inputGraph, int max_cutwidth);
+void write_encoding(std::string clause);
 
 
 
