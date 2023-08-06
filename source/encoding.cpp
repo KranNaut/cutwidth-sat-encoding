@@ -63,7 +63,6 @@ void create_encoding(Graph &graph, int max_cutwidth) {
         counter = 0;
     }
 
-    std::cout << counter_clause << std::endl;
     
     write_encoding("c Generated encoding file\n");
     write_encoding("p cnf " + 
