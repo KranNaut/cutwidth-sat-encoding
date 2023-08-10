@@ -11,6 +11,11 @@ int main()
     std::cout << "Number of edges: " << inputGraph.num_edges<< "\n" << std::endl;
     
     create_encoding(inputGraph);
+
+
+    for(auto i: inputGraph.edge_list){
+        std::cout << std::get<0>(i) << " " << std::get<1>(i) << std::endl;
+    }
     
     
 

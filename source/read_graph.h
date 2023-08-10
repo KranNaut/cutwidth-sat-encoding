@@ -7,6 +7,7 @@ DIMACS file.
 #define READ_GRAPH_H_
 
 #include <string>
+#include <vector>
 
 struct Node {
     int vertex;
@@ -16,14 +17,13 @@ struct Node {
 struct Graph {
     int num_vertices;
     int num_edges;
-    Node **adjacency_list;
+    std::vector <std::tuple<int,int>> edge_list;
 };
 
 Graph read_dimacs(std::string filename);
 Graph parse_dimacs_header(std::string line);
 void parse_dimacs_edge(std::string line, Graph &graph);
-Node* add_edge(Node* head, int vertex);
-Node* remove_edge(Node* head, int vertex);
-bool check_edge(Graph &graph, int vertex1, int vertex2);
+void add_edge(Graph &graph, int v1, int v2);
+bool check_edge(Graph &graph, int v1, int v2);
 
 #endif // !READ_GRAPH_H_
