@@ -4,17 +4,17 @@
 
 
 int main()
-{
+{   
     std::string fileName= "example.dimacs";
     Graph inputGraph = read_dimacs(fileName);
     std::cout << "Number of vertice: " << inputGraph.num_vertices << std::endl;
     std::cout << "Number of edges: " << inputGraph.num_edges<< "\n" << std::endl;
     
-    create_encoding(inputGraph,1);
+    create_encoding(inputGraph);
     
     
 
-    std::cout<< "Done~~~~~~~~" << std::endl;
+    std::cout<< "Done~~~~~~~~"  <<  std::endl;
 
 
     

@@ -2,13 +2,18 @@
 #define ENCODING_H_
 
 #include <string>
+#include <vector>
+#include <tuple>
 #include <unordered_map>
 #include "read_graph.h"
 
 
 
 extern std::unordered_map <std::string, int> clause_map;
-void create_encoding(Graph &inputGraph, int max_cutwidth);
+extern std::vector<std::tuple<int,int>> edge_list;
+
+
+void create_encoding(Graph &inputGraph);
 void write_encoding(std::string clause);
 void write_clause_map(std::unordered_map <std::string, int> clause_map);
 

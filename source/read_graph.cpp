@@ -37,9 +37,9 @@ Graph parse_dimacs_header(std::string line) {
     iss >> word;  // Skip the first word "p"
     iss >> word;  // Skip the second word "edge"
     iss >> word;
-    graph.num_edges = std::stoi(word);
-    iss >> word;
     graph.num_vertices = std::stoi(word);
+    iss >> word;
+    graph.num_edges = std::stoi(word);
     graph.adjacency_list = new Node*[graph.num_vertices];
     for (int i = 0; i < graph.num_vertices; i++) {
         graph.adjacency_list[i] = NULL;
