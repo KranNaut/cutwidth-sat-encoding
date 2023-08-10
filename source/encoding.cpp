@@ -9,6 +9,7 @@
 #include <fstream>
 
 
+
 void write_encoding(std::string clause) {
     std::ofstream encoding_file;
     encoding_file.open("encoding.sat", std::ios_base::trunc);
@@ -98,7 +99,7 @@ void create_encoding(Graph &graph) {
                 }
                 anti_reflixive_clause +=  std::to_string(clause_map[anti_ref_clause1]) + " " + std::to_string(clause_map[anti_ref_clause2]) + " 0\n";
                 anti_reflixive_clause += "-" + std::to_string(clause_map[anti_ref_clause1]) + " -" + std::to_string(clause_map[anti_ref_clause2]) + " 0\n";
-                num_clauses++;
+                num_clauses+= 2;
             }
         }
     }
@@ -109,12 +110,60 @@ void create_encoding(Graph &graph) {
     std::string count_clause2 = "";
     std::string count_clause3 = "";
     std::string count_clause4 = "";
+    std::string count_clause5 = "";
+    std::string count_clause6 = "";
 
-    for(int i = 0; i < graph.num_vertices; i++){
-        for(int j = i+1; j < graph.num_vertices; j++){
+    // Iterating over the edges of the graph
+    for(int vertex = 0; vertex < graph.num_vertices; vertex++){
+        int e = 0;
+        for(int i=0; i < graph.num_vertices; i++){
+            for(auto j = graph.adjacency_list[i]; j; j= j->next){
+                e++;
+                for(int n = 0; n < e; n++){
 
-            if(check_edge(graph, i, j)){
-           
+                    //counter_clause += "Iterating Vertex " + std::to_string(vertex + 1) + " Edge number" + std::to_string(e) + " from " + std::to_string(i+1) + " to " + std::to_string(j->vertex + 1) + "\n"; 
+
+                    if((vertex != i) ){
+                        count_clause1 = "C(" + std::to_string(vertex+1) + "," + std::to_string(e) + "," + std::to_string(n) + ")";
+                        count_clause2 = "O(" + std::to_string(i+1) + "," + std::to_string(vertex+1) + ")";
+                        count_clause3 = "O(" + std::to_string(vertex+1) + "," + std::to_string(i+1) + ")";
+                        count_clause4 = "O(" + std::to_string(vertex+1) + "," + std::to_string((j->vertex)+1) + ")";
+                        count_clause5 = "O(" + std::to_string((j->vertex)+1) + "," + std::to_string(vertex+1) + ")";
+                        count_clause6 = "C(" + std::to_string(vertex+1) + "," + std::to_string(e+1) + "," + std::to_string(n+1) + ")";
+                        if(clause_map.find(count_clause1) == clause_map.end()){
+                            clause_map[count_clause1] = num_var+1;
+                            num_var++;
+                        }
+                        if(clause_map.find(count_clause2) == clause_map.end()){
+                            clause_map[count_clause2] = num_var+1;
+                            num_var++;
+                        }
+                        if(clause_map.find(count_clause3) == clause_map.end()){
+                            clause_map[count_clause3] = num_var+1;
+                            num_var++;
+                        }
+                        if(clause_map.find(count_clause4) == clause_map.end()){
+                            clause_map[count_clause4] = num_var+1;
+                            num_var++;
+                        }
+                        if(clause_map.find(count_clause5) == clause_map.end()){
+                            clause_map[count_clause5] = num_var+1;
+                            num_var++;
+                        }
+                        if(clause_map.find(count_clause6) == clause_map.end()){
+                            clause_map[count_clause6] = num_var+1;
+                            num_var++;
+                        }
+
+                        counter_clause += "-C" + std::to_string(vertex+1) + std::to_string(e) + std::to_string(n) + 
+                                        " -O" + std::to_string(i+1) + std::to_string(vertex+1) + 
+                                        " -O" + std::to_string(vertex+1) + std::to_string((j->vertex)+1) +
+                                        " -O" + std::to_string(vertex+1) + std::to_string(i+1) + 
+                                        " -O" + std::to_string((j->vertex)+1) + std::to_string(vertex+1) +
+                                        " C" + std::to_string(vertex+1) + std::to_string(e+1) + std::to_string(n+1) + " 0\n";
+                        num_clauses++;
+                    }
+                }           
             }
         }
     }
@@ -122,7 +171,7 @@ void create_encoding(Graph &graph) {
 
 
 
-    // // Iterating over the edges of the graph
+
     // for(int k = 0; k < graph.num_vertices; k++){
     //     //Counter variable for each vertex
     //     for(int i = 0; i < graph.num_vertices-1; i++){

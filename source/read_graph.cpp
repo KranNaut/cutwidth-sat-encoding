@@ -57,12 +57,10 @@ void parse_dimacs_edge(std::string line, Graph &graph){
     iss >> word;
     int vertex2 = std::stoi(word) - 1;
     graph.adjacency_list[vertex1] = add_edge(graph.adjacency_list[vertex1], vertex2);
-    graph.adjacency_list[vertex2] = add_edge(graph.adjacency_list[vertex2], vertex1);
+    //graph.adjacency_list[vertex2] = add_edge(graph.adjacency_list[vertex2], vertex1);
 }
 
 Node* add_edge(Node* head, int vertex) {
-    
-    
 
     if (head == NULL) {
         head = new Node{vertex, NULL};
