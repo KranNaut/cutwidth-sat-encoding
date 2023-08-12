@@ -119,9 +119,10 @@ void create_encoding(Graph &graph, int max_cutwidth) {
         for(int i=0; i < graph.num_vertices; i++){
             for(auto j = graph.adjacency_list[i]; j; j= j->next){
                 
-                if((vertex != i && vertex != j->vertex) ){
+                for(int n = 0; n < e; n++){
                     
-                    for(int n = 0; n < e; n++){
+                    if((vertex != i && vertex != j->vertex) ){
+                    
                     //std::cout << "Iterating Vertex " << vertex + 1 << " Edge number " << e << " iteration " << n+1 << " from " << i+1 << " to " << j->vertex + 1 << std::endl;
                     //counter_clause += "Iterating Vertex " + std::to_string(vertex + 1) + " Edge number" + std::to_string(e) + " from " + std::to_string(i+1) + " to " + std::to_string(j->vertex + 1) + "\n"; 
 
@@ -171,12 +172,8 @@ void create_encoding(Graph &graph, int max_cutwidth) {
                                         " -O" + std::to_string((j->vertex)+1) + std::to_string(vertex+1) +
                                         " C" + std::to_string(vertex+1) + std::to_string(e+1) + std::to_string(n+1) + " 0\n";
                         num_clauses+= 2;
-                    }
-                }
-                else if (vertex != j->vertex) {
-
-                    for(int n = 0; n < e; n++){
-                        //std::cout << "Iterating Vertex " << vertex + 1 << " Edge number " << e << " iteration " << n+1 << " from " << i+1 << " to " << j->vertex + 1 << std::endl;
+                    }else if (vertex != j->vertex) {
+                        //std::cout << "Iterating Vertex- " << vertex + 1 << " Edge number " << e << " iteration " << n+1 << " from " << i+1 << " to " << j->vertex + 1 << std::endl;
                         
                         
                         count_clause1 = "C(" + std::to_string(vertex+1) + "," + std::to_string(e) + "," + std::to_string(n) + ")";
@@ -210,12 +207,13 @@ void create_encoding(Graph &graph, int max_cutwidth) {
 
                         num_clauses++;
                     }
-
-                }    
-                e++;       
-            }
+                }
+                
+                e++; 
+            }                 
         }
     }
+    
 
 
 
