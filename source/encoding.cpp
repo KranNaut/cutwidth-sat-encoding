@@ -32,7 +32,7 @@ void write_clause_map(std::unordered_map <std::string, int> clause_map) {
 std::unordered_map <std::string, int> clause_map;
 
 
-void create_encoding(Graph &graph) {
+void create_encoding(Graph &graph, int max_cutwidth) {
     
     int num_var = 0;
     int num_clauses = 0;
@@ -115,15 +115,17 @@ void create_encoding(Graph &graph) {
 
     // Iterating over the edges of the graph
     for(int vertex = 0; vertex < graph.num_vertices; vertex++){
-        int e = 0;
+        int e = 1;
         for(int i=0; i < graph.num_vertices; i++){
             for(auto j = graph.adjacency_list[i]; j; j= j->next){
-                e++;
-                for(int n = 0; n < e; n++){
-
+                
+                if((vertex != i && vertex != j->vertex) ){
+                    
+                    for(int n = 0; n < e; n++){
+                    //std::cout << "Iterating Vertex " << vertex + 1 << " Edge number " << e << " iteration " << n+1 << " from " << i+1 << " to " << j->vertex + 1 << std::endl;
                     //counter_clause += "Iterating Vertex " + std::to_string(vertex + 1) + " Edge number" + std::to_string(e) + " from " + std::to_string(i+1) + " to " + std::to_string(j->vertex + 1) + "\n"; 
 
-                    if((vertex != i) ){
+                    
                         count_clause1 = "C(" + std::to_string(vertex+1) + "," + std::to_string(e) + "," + std::to_string(n) + ")";
                         count_clause2 = "O(" + std::to_string(i+1) + "," + std::to_string(vertex+1) + ")";
                         count_clause3 = "O(" + std::to_string(vertex+1) + "," + std::to_string(i+1) + ")";
@@ -136,18 +138,22 @@ void create_encoding(Graph &graph) {
                         }
                         if(clause_map.find(count_clause2) == clause_map.end()){
                             clause_map[count_clause2] = num_var+1;
+                            std::cout << "count_clause2 " << count_clause2 << " " << num_var+1 << std::endl;
                             num_var++;
                         }
                         if(clause_map.find(count_clause3) == clause_map.end()){
                             clause_map[count_clause3] = num_var+1;
+                            std::cout << "count_clause3 " << count_clause3 << " " << num_var+1 << std::endl;
                             num_var++;
                         }
                         if(clause_map.find(count_clause4) == clause_map.end()){
                             clause_map[count_clause4] = num_var+1;
+                            std::cout << "count_clause4 " << count_clause4 << " " << num_var+1 << std::endl;
                             num_var++;
                         }
                         if(clause_map.find(count_clause5) == clause_map.end()){
                             clause_map[count_clause5] = num_var+1;
+                            std::cout << "count_clause5 " << count_clause5 << " " << num_var+1 << std::endl;
                             num_var++;
                         }
                         if(clause_map.find(count_clause6) == clause_map.end()){
@@ -157,13 +163,56 @@ void create_encoding(Graph &graph) {
 
                         counter_clause += "-C" + std::to_string(vertex+1) + std::to_string(e) + std::to_string(n) + 
                                         " -O" + std::to_string(i+1) + std::to_string(vertex+1) + 
-                                        " -O" + std::to_string(vertex+1) + std::to_string((j->vertex)+1) +
+                                        " -O" + std::to_string(vertex+1) + std::to_string((j->vertex)+1) + 
+                                        " C" + std::to_string(vertex+1) + std::to_string(e+1) + std::to_string(n+1) + " 0\n";
+                                        
+                        counter_clause += "-C" + std::to_string(vertex+1) + std::to_string(e) + std::to_string(n) +
                                         " -O" + std::to_string(vertex+1) + std::to_string(i+1) + 
                                         " -O" + std::to_string((j->vertex)+1) + std::to_string(vertex+1) +
                                         " C" + std::to_string(vertex+1) + std::to_string(e+1) + std::to_string(n+1) + " 0\n";
+                        num_clauses+= 2;
+                    }
+                }
+                else if (vertex != j->vertex) {
+
+                    for(int n = 0; n < e; n++){
+                        //std::cout << "Iterating Vertex " << vertex + 1 << " Edge number " << e << " iteration " << n+1 << " from " << i+1 << " to " << j->vertex + 1 << std::endl;
+                        
+                        
+                        count_clause1 = "C(" + std::to_string(vertex+1) + "," + std::to_string(e) + "," + std::to_string(n) + ")";
+                        count_clause2 = "O(" + std::to_string(i+1) + "," + std::to_string(vertex+1) + ")";
+                        count_clause3 = "O(" + std::to_string((j->vertex)+1) + "," + std::to_string(vertex+1) + ")";
+                        count_clause4 = "C(" + std::to_string(vertex+1) + "," + std::to_string(e+1) + "," + std::to_string(n+1) + ")";
+                        if(clause_map.find(count_clause1) == clause_map.end()){
+                            clause_map[count_clause1] = num_var+1;
+                            num_var++;
+                        }
+                        if(clause_map.find(count_clause2) == clause_map.end()){
+                            clause_map[count_clause2] = num_var+1;
+                            std::cout << "count_clause2- " << count_clause2 << " " << num_var+1 << std::endl;
+                            num_var++;
+                        }
+                        if(clause_map.find(count_clause3) == clause_map.end()){
+                            clause_map[count_clause3] = num_var+1;
+                            std::cout << "count_clause3- " << count_clause3 << " " << num_var+1 << std::endl;
+                            num_var++;
+                        }
+                        if(clause_map.find(count_clause4) == clause_map.end()){
+                            clause_map[count_clause4] = num_var+1;
+                            num_var++;
+                        }
+
+                        // Only check if the edge starts on the right side of the vertex and ends on it
+                        counter_clause += "-C" + std::to_string(vertex+1) + std::to_string(e) + std::to_string(n) + 
+                                        " -O" + std::to_string(i+1) + std::to_string(vertex+1) + 
+                                        " -O" + std::to_string(vertex+1) + std::to_string((j->vertex)+1) + 
+                                        " C" + std::to_string(vertex+1) + std::to_string(e+1) + std::to_string(n+1) + " 0\n";
+
                         num_clauses++;
                     }
-                }           
+
+                }    
+                e++;       
             }
         }
     }

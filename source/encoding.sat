@@ -1,5 +1,5 @@
 c Generated encoding file
-p cnf 20 80
+p cnf 111 185
 -1 -2 3 0
 -4 -5 3 0
 -6 -7 3 0
@@ -80,78 +80,108 @@ p cnf 20 80
 -10 -15 0
 13 16 0
 -13 -16 0
-Iterating Vertex 1 Edge number1 from 1 to 2
-Iterating Vertex 1 Edge number2 from 2 to 3
-Iterating Vertex 1 Edge number2 from 2 to 3
-Iterating Vertex 1 Edge number3 from 2 to 4
-Iterating Vertex 1 Edge number3 from 2 to 4
-Iterating Vertex 1 Edge number3 from 2 to 4
-Iterating Vertex 1 Edge number4 from 3 to 4
-Iterating Vertex 1 Edge number4 from 3 to 4
-Iterating Vertex 1 Edge number4 from 3 to 4
-Iterating Vertex 1 Edge number4 from 3 to 4
-Iterating Vertex 1 Edge number5 from 4 to 5
-Iterating Vertex 1 Edge number5 from 4 to 5
-Iterating Vertex 1 Edge number5 from 4 to 5
-Iterating Vertex 1 Edge number5 from 4 to 5
-Iterating Vertex 1 Edge number5 from 4 to 5
-Iterating Vertex 2 Edge number1 from 1 to 2
-Iterating Vertex 2 Edge number2 from 2 to 3
-Iterating Vertex 2 Edge number2 from 2 to 3
-Iterating Vertex 2 Edge number3 from 2 to 4
-Iterating Vertex 2 Edge number3 from 2 to 4
-Iterating Vertex 2 Edge number3 from 2 to 4
-Iterating Vertex 2 Edge number4 from 3 to 4
-Iterating Vertex 2 Edge number4 from 3 to 4
-Iterating Vertex 2 Edge number4 from 3 to 4
-Iterating Vertex 2 Edge number4 from 3 to 4
-Iterating Vertex 2 Edge number5 from 4 to 5
-Iterating Vertex 2 Edge number5 from 4 to 5
-Iterating Vertex 2 Edge number5 from 4 to 5
-Iterating Vertex 2 Edge number5 from 4 to 5
-Iterating Vertex 2 Edge number5 from 4 to 5
-Iterating Vertex 3 Edge number1 from 1 to 2
-Iterating Vertex 3 Edge number2 from 2 to 3
-Iterating Vertex 3 Edge number2 from 2 to 3
-Iterating Vertex 3 Edge number3 from 2 to 4
-Iterating Vertex 3 Edge number3 from 2 to 4
-Iterating Vertex 3 Edge number3 from 2 to 4
-Iterating Vertex 3 Edge number4 from 3 to 4
-Iterating Vertex 3 Edge number4 from 3 to 4
-Iterating Vertex 3 Edge number4 from 3 to 4
-Iterating Vertex 3 Edge number4 from 3 to 4
-Iterating Vertex 3 Edge number5 from 4 to 5
-Iterating Vertex 3 Edge number5 from 4 to 5
-Iterating Vertex 3 Edge number5 from 4 to 5
-Iterating Vertex 3 Edge number5 from 4 to 5
-Iterating Vertex 3 Edge number5 from 4 to 5
-Iterating Vertex 4 Edge number1 from 1 to 2
-Iterating Vertex 4 Edge number2 from 2 to 3
-Iterating Vertex 4 Edge number2 from 2 to 3
-Iterating Vertex 4 Edge number3 from 2 to 4
-Iterating Vertex 4 Edge number3 from 2 to 4
-Iterating Vertex 4 Edge number3 from 2 to 4
-Iterating Vertex 4 Edge number4 from 3 to 4
-Iterating Vertex 4 Edge number4 from 3 to 4
-Iterating Vertex 4 Edge number4 from 3 to 4
-Iterating Vertex 4 Edge number4 from 3 to 4
-Iterating Vertex 4 Edge number5 from 4 to 5
-Iterating Vertex 4 Edge number5 from 4 to 5
-Iterating Vertex 4 Edge number5 from 4 to 5
-Iterating Vertex 4 Edge number5 from 4 to 5
-Iterating Vertex 4 Edge number5 from 4 to 5
-Iterating Vertex 5 Edge number1 from 1 to 2
-Iterating Vertex 5 Edge number2 from 2 to 3
-Iterating Vertex 5 Edge number2 from 2 to 3
-Iterating Vertex 5 Edge number3 from 2 to 4
-Iterating Vertex 5 Edge number3 from 2 to 4
-Iterating Vertex 5 Edge number3 from 2 to 4
-Iterating Vertex 5 Edge number4 from 3 to 4
-Iterating Vertex 5 Edge number4 from 3 to 4
-Iterating Vertex 5 Edge number4 from 3 to 4
-Iterating Vertex 5 Edge number4 from 3 to 4
-Iterating Vertex 5 Edge number5 from 4 to 5
-Iterating Vertex 5 Edge number5 from 4 to 5
-Iterating Vertex 5 Edge number5 from 4 to 5
-Iterating Vertex 5 Edge number5 from 4 to 5
-Iterating Vertex 5 Edge number5 from 4 to 5
+-C110 -O11 -O12 C121 0
+-C120 -O21 -O13 C131 0
+-C120 -O12 -O31 C131 0
+-C121 -O21 -O13 C132 0
+-C121 -O12 -O31 C132 0
+-C130 -O21 -O14 C141 0
+-C130 -O12 -O41 C141 0
+-C131 -O21 -O14 C142 0
+-C131 -O12 -O41 C142 0
+-C132 -O21 -O14 C143 0
+-C132 -O12 -O41 C143 0
+-C140 -O31 -O14 C151 0
+-C140 -O13 -O41 C151 0
+-C141 -O31 -O14 C152 0
+-C141 -O13 -O41 C152 0
+-C142 -O31 -O14 C153 0
+-C142 -O13 -O41 C153 0
+-C143 -O31 -O14 C154 0
+-C143 -O13 -O41 C154 0
+-C150 -O41 -O15 C161 0
+-C150 -O14 -O51 C161 0
+-C151 -O41 -O15 C162 0
+-C151 -O14 -O51 C162 0
+-C152 -O41 -O15 C163 0
+-C152 -O14 -O51 C163 0
+-C153 -O41 -O15 C164 0
+-C153 -O14 -O51 C164 0
+-C154 -O41 -O15 C165 0
+-C154 -O14 -O51 C165 0
+-C220 -O22 -O23 C231 0
+-C221 -O22 -O23 C232 0
+-C230 -O22 -O24 C241 0
+-C231 -O22 -O24 C242 0
+-C232 -O22 -O24 C243 0
+-C240 -O32 -O24 C251 0
+-C240 -O23 -O42 C251 0
+-C241 -O32 -O24 C252 0
+-C241 -O23 -O42 C252 0
+-C242 -O32 -O24 C253 0
+-C242 -O23 -O42 C253 0
+-C243 -O32 -O24 C254 0
+-C243 -O23 -O42 C254 0
+-C250 -O42 -O25 C261 0
+-C250 -O24 -O52 C261 0
+-C251 -O42 -O25 C262 0
+-C251 -O24 -O52 C262 0
+-C252 -O42 -O25 C263 0
+-C252 -O24 -O52 C263 0
+-C253 -O42 -O25 C264 0
+-C253 -O24 -O52 C264 0
+-C254 -O42 -O25 C265 0
+-C254 -O24 -O52 C265 0
+-C310 -O13 -O32 C321 0
+-C310 -O31 -O23 C321 0
+-C330 -O23 -O34 C341 0
+-C330 -O32 -O43 C341 0
+-C331 -O23 -O34 C342 0
+-C331 -O32 -O43 C342 0
+-C332 -O23 -O34 C343 0
+-C332 -O32 -O43 C343 0
+-C340 -O33 -O34 C351 0
+-C341 -O33 -O34 C352 0
+-C342 -O33 -O34 C353 0
+-C343 -O33 -O34 C354 0
+-C350 -O43 -O35 C361 0
+-C350 -O34 -O53 C361 0
+-C351 -O43 -O35 C362 0
+-C351 -O34 -O53 C362 0
+-C352 -O43 -O35 C363 0
+-C352 -O34 -O53 C363 0
+-C353 -O43 -O35 C364 0
+-C353 -O34 -O53 C364 0
+-C354 -O43 -O35 C365 0
+-C354 -O34 -O53 C365 0
+-C410 -O14 -O42 C421 0
+-C410 -O41 -O24 C421 0
+-C420 -O24 -O43 C431 0
+-C420 -O42 -O34 C431 0
+-C421 -O24 -O43 C432 0
+-C421 -O42 -O34 C432 0
+-C450 -O44 -O45 C461 0
+-C451 -O44 -O45 C462 0
+-C452 -O44 -O45 C463 0
+-C453 -O44 -O45 C464 0
+-C454 -O44 -O45 C465 0
+-C510 -O15 -O52 C521 0
+-C510 -O51 -O25 C521 0
+-C520 -O25 -O53 C531 0
+-C520 -O52 -O35 C531 0
+-C521 -O25 -O53 C532 0
+-C521 -O52 -O35 C532 0
+-C530 -O25 -O54 C541 0
+-C530 -O52 -O45 C541 0
+-C531 -O25 -O54 C542 0
+-C531 -O52 -O45 C542 0
+-C532 -O25 -O54 C543 0
+-C532 -O52 -O45 C543 0
+-C540 -O35 -O54 C551 0
+-C540 -O53 -O45 C551 0
+-C541 -O35 -O54 C552 0
+-C541 -O53 -O45 C552 0
+-C542 -O35 -O54 C553 0
+-C542 -O53 -O45 C553 0
+-C543 -O35 -O54 C554 0
+-C543 -O53 -O45 C554 0

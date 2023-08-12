@@ -13,7 +13,7 @@ extern std::unordered_map <std::string, int> clause_map;
 extern std::vector<std::tuple<int,int>> edge_list;
 
 
-void create_encoding(Graph &inputGraph);
+void create_encoding(Graph &inputGraph, int max_cutwidth);
 void write_encoding(std::string clause);
 void write_clause_map(std::unordered_map <std::string, int> clause_map);
 
