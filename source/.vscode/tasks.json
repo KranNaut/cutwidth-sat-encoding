@@ -9,7 +9,11 @@
 				"-fdiagnostics-color=always",
 				"-g",
 				"${workspaceFolder}/*.cpp",
-				"${workspaceFolder}/*.h",
+				"-I",
+				"${workspaceFolder}/include/cryptominisat5",
+				"-L",
+				"${workspaceFolder}/lib",
+				"-lcryptominisat5",
 				"-o",
 				"${fileDirname}/${fileBasenameNoExtension}"
 			],
