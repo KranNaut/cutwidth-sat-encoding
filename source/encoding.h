@@ -14,15 +14,15 @@
 
 extern std::unordered_map <std::string, int> clause_map;
 extern std::vector<std::tuple<int,int>> edge_list;
-extern CMSat::SATSolver solver;
+//extern CMSat::SATSolver solver;
 // vector of vector for all clauses
-extern std::vector<std::vector<CMSat::Lit>> clauses;
+//extern std::vector<std::vector<CMSat::Lit>> clauses;
 
 
-void create_encoding(Graph &inputGraph, int max_cutwidth);
+std::tuple <bool, std::vector<CMSat::lbool>> create_encoding(Graph &inputGraph, int max_cutwidth);
 void write_encoding(std::string clause);
 void write_clause_map(std::unordered_map <std::string, int> clause_map);
-
+std::string find_cutwidth(Graph &graph, int timeout);
 
 
 #endif // !ENCODING_H_

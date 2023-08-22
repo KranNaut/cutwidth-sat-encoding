@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-
+#include <ctime>
 #include <cryptominisat5/cryptominisat.h>
 #include <assert.h>
 #include <vector>
@@ -31,13 +31,15 @@ void write_clause_map(std::unordered_map <std::string, int> clause_map) {
 
 
 std::unordered_map <std::string, int> clause_map;
-CMSat::SATSolver solver;
-std::vector<std::vector<CMSat::Lit>> clauses;
-std::vector<CMSat::Lit> temp_clause;
+int num_var = 0;
 
-void create_encoding(Graph &graph, int max_cutwidth) {
+
+std::tuple <bool, std::vector<CMSat::lbool>> create_encoding(Graph &graph, int max_cutwidth) {
     
-    int num_var = 0;
+    CMSat::SATSolver solver;
+    std::vector<std::vector<CMSat::Lit>> clauses;
+    std::vector<CMSat::Lit> temp_clause;
+
     int num_clauses = 0;
     std::string trans_clause1 = "";
     std::string trans_clause2 = "";
@@ -297,28 +299,24 @@ void create_encoding(Graph &graph, int max_cutwidth) {
     solver.new_vars(num_var+1);
 
     for(auto clause : clauses){
-        std::cout << "Adding clause: "<< clause << std::endl;
+        //std::cout << "Adding clause: "<< clause << std::endl;
         solver.add_clause(clause);
     }
 
-    std::cout << "Number of variables: " << num_var+1 << std::endl;
-    std::cout << "Number of clauses: " << num_clauses << std::endl; 
+    //std::cout << "Number of variables: " << num_var+1 << std::endl;
+    //std::cout << "Number of clauses: " << num_clauses << std::endl; 
 
 
 
     CMSat::lbool ret = solver.solve(&assumptions);
     if(ret == CMSat::l_True){
-        std::cout << "SAT" << std::endl;
+        //std::cout << "SAT" << std::endl;
         std::vector<CMSat::lbool> model = solver.get_model();
-        for(int i = 0; i < model.size(); i++){
-            if(model[i] == CMSat::l_True){
-                std::cout << "Variable " << i << " is true" << std::endl;
-            }else{
-                std::cout << "Variable " << i << " is false" << std::endl;
-            }
-        }
+        return std::make_tuple(true, model);
     }else if(ret == CMSat::l_False){
-        std::cout << "UNSAT" << std::endl;
+        return std::make_tuple(false, std::vector<CMSat::lbool>());
+        //std::cout << "UNSAT" << std::endl;
+        
     }
 
 
@@ -331,4 +329,72 @@ void create_encoding(Graph &graph, int max_cutwidth) {
     write_encoding(encoding);
     write_clause_map(clause_map);
 
+}
+
+
+
+
+std::string find_cutwidth(Graph &graph, int timeout){
+
+    int delta = 0;
+    int counter = 0;
+    std::time_t t1 = std::time(0);
+    for(int i = 0; i < graph.num_vertices; i++){
+        counter = 0;
+        for(auto current = graph.adjacency_list[i]; current; current = current->next){
+            counter+=1;
+        }
+        if (counter>delta){
+            delta = counter;
+        }
+    }
+    std::cout << "Delta: " << delta << std::endl;
+
+
+
+    //binary search for the cutwidth
+    int lower = delta/2;
+    int upper = graph.num_edges;
+    int mid = (lower + upper)/2;
+    bool result;
+    std::vector<CMSat::lbool> model;
+    std::vector<CMSat::lbool> temp_model;
+    std::string output = "";
+
+
+    while(upper>lower){
+        std::cout << "Lower: " << lower << std::endl;
+        std::cout << "Upper: " << upper << std::endl;
+        std::cout << "Mid: " << mid << std::endl;
+        std::time_t t2 = std::time(0);
+        if(t2-t1 > timeout){
+            output = "Upper bound: " + std::to_string(upper) + "\n" +
+                     "Lower bound: " + std::to_string(lower) + "\n";
+            return output;
+        }
+        tie(result, temp_model) = create_encoding(graph, mid);
+        if(result == true){
+            std::cout << "SAT" << std::endl;
+            model = temp_model;
+            upper = mid;
+            mid = (lower + upper)/2;
+        }else if(result == false){
+            std::cout << "UNSAT" << std::endl;
+            lower = mid + 1;
+            mid = (lower + upper)/2;
+        }
+        std::cout << "After Lower: " << lower << std::endl;
+        std::cout << "After Upper: " << upper << std::endl;
+        std::cout << "After Mid: " << mid << std::endl;
+    }
+    output = "Cutwidth: " + std::to_string(mid) + "\n";
+    for(int i=0; i < model.size(); i++){
+        if(model[i] == CMSat::l_True){
+            for (auto it = clause_map.begin(); it != clause_map.end(); ++it) {
+                if (it->second == i && it->first[0] == 'O') output += it->first + "\n";
+            } 
+        }
+    }
+
+    return output;
 }
