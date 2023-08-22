@@ -192,6 +192,7 @@ std::tuple <bool, std::vector<CMSat::lbool>> create_encoding(Graph &graph, int m
 
                     if(n == max_cutwidth){
                         assume = "C(" + std::to_string(vertex+1) + "," + std::to_string(e) + "," + std::to_string(n) + ")";
+                        //std::cout << "Assume: " << assume << std::endl;
                         if(clause_map.find(assume) == clause_map.end()){
                             clause_map[assume] = num_var;
                             num_var++;
@@ -289,8 +290,8 @@ std::tuple <bool, std::vector<CMSat::lbool>> create_encoding(Graph &graph, int m
                     }
                 }
                 
-                e++; 
-            }                 
+                 
+            }   e++;              
         }
     }
     
@@ -389,7 +390,7 @@ std::string find_cutwidth(Graph &graph, int timeout){
     }
     output = "Cutwidth: " + std::to_string(mid) + "\n";
     for(int i=0; i < model.size(); i++){
-        if(model[i] == CMSat::l_True){
+        if(model[i] == CMSat::l_False){
             for (auto it = clause_map.begin(); it != clause_map.end(); ++it) {
                 if (it->second == i && it->first[0] == 'O') output += it->first + "\n";
             } 

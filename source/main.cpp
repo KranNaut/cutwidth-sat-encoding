@@ -4,17 +4,23 @@
 #include "encoding.h"
 
 
-int main()
+int main(int argc,char *argv[])
 {   
 
-    
-    std::string fileName= "example.dimacs";
+    int timeout = 100;
+    std::string fileName= "graph.dimacs";
+    if (argc > 1) {
+        fileName = argv[1];
+    }
+    if (argc > 2) {
+        timeout = int(argv[2]);
+    }
     Graph inputGraph = read_dimacs(fileName);
     std::cout << "Number of vertice: " << inputGraph.num_vertices << std::endl;
     std::cout << "Number of edges: " << inputGraph.num_edges<< "\n" << std::endl;
     
     auto start = std::chrono::high_resolution_clock::now();
-    std::string result = find_cutwidth(inputGraph,10);
+    std::string result = find_cutwidth(inputGraph,timeout);
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
 
