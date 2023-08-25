@@ -14,9 +14,7 @@
 
 extern std::unordered_map <std::string, int> clause_map;
 extern std::vector<std::tuple<int,int>> edge_list;
-//extern CMSat::SATSolver solver;
-// vector of vector for all clauses
-//extern std::vector<std::vector<CMSat::Lit>> clauses;
+
 
 
 std::tuple <bool, std::vector<CMSat::lbool>> create_encoding(Graph &inputGraph, int max_cutwidth);

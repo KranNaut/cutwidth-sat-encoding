@@ -31,7 +31,8 @@ void write_clause_map(std::unordered_map <std::string, int> clause_map) {
 
 
 std::unordered_map <std::string, int> clause_map;
-int num_var = 0;
+std::unordered_map <int, std::string> rev_clause_map;
+int num_var = 1;
 
 
 std::tuple <bool, std::vector<CMSat::lbool>> create_encoding(Graph &graph, int max_cutwidth) {
@@ -55,6 +56,7 @@ std::tuple <bool, std::vector<CMSat::lbool>> create_encoding(Graph &graph, int m
         self_clause += self_clause1 + " 0\n";
         if(clause_map.find(self_clause1) == clause_map.end()){
             clause_map[self_clause1] = num_var;
+            rev_clause_map[num_var] = self_clause1;
             num_var++;
         }
         num_clauses++;
@@ -72,24 +74,22 @@ std::tuple <bool, std::vector<CMSat::lbool>> create_encoding(Graph &graph, int m
         for(int j = 1; j <= graph.num_vertices; j++){
             for(int k = 1; k <= graph.num_vertices; k++){
                 if(j != k && j != i && k != i){
-                    // transitive_clause += "-O" + std::to_string(j) + std::to_string(k) + 
-                    // " -O"  + std::to_string(k) + std::to_string(i) + 
-                    // " O" + std::to_string(j)+ std::to_string(i) + " 0\n";
-
-
                     trans_clause1 = "O(" + std::to_string(j) + "," + std::to_string(k) + ")";
                     trans_clause2 = "O(" + std::to_string(k) + "," + std::to_string(i) + ")";
                     trans_clause3 = "O(" + std::to_string(j) + "," + std::to_string(i) + ")";
                     if(clause_map.find(trans_clause1) == clause_map.end()){
                         clause_map[trans_clause1] = num_var;
+                        rev_clause_map[num_var] = trans_clause1;
                         num_var++;
                     }
                     if(clause_map.find(trans_clause2) == clause_map.end()){
                         clause_map[trans_clause2] = num_var;
+                        rev_clause_map[num_var] = trans_clause2;
                         num_var++;
                     }
                     if(clause_map.find(trans_clause3) == clause_map.end()){
                         clause_map[trans_clause3] = num_var;
+                        rev_clause_map[num_var] = trans_clause3;
                         num_var++;
                     }
 
@@ -117,17 +117,19 @@ std::tuple <bool, std::vector<CMSat::lbool>> create_encoding(Graph &graph, int m
     for(int j = 1; j <= graph.num_vertices; j++){
         for(int k = j + 1; k <= graph.num_vertices; k++){
             if(j != k){
-                // anti_reflixive_clause += "-O" + std::to_string(j) + std::to_string(k) + " -O"  + std::to_string(k) + std::to_string(j) + " 0\n";
+                // reflixive_clause += "-O" + std::to_string(j) + std::to_string(k) + " -O"  + std::to_string(k) + std::to_string(j) + " 0\n";
 
 
                 anti_ref_clause1 = "O(" + std::to_string(j) + "," + std::to_string(k) + ")";
                 anti_ref_clause2 = "O(" + std::to_string(k) + "," + std::to_string(j) + ")";
                 if(clause_map.find(anti_ref_clause1) == clause_map.end()){
                     clause_map[anti_ref_clause1] = num_var;
+                    rev_clause_map[num_var] = anti_ref_clause1;
                     num_var++;
                 }
                 if(clause_map.find(anti_ref_clause2) == clause_map.end()){
                     clause_map[anti_ref_clause2] = num_var;
+                    rev_clause_map[num_var] = anti_ref_clause2;
                     num_var++;
                 }
                 anti_reflixive_clause +=  anti_ref_clause1 + " " + anti_ref_clause2 + " 0\n";
@@ -176,11 +178,13 @@ std::tuple <bool, std::vector<CMSat::lbool>> create_encoding(Graph &graph, int m
                 
                 for(int n = 0; (n <= e); n++){
 
+
                     if(n==0){
-                        count_clause1 = "C(" + std::to_string(vertex+1) + "," + std::to_string(e) + "," + std::to_string(n) + ")";
+                        count_clause1 = "C(" + std::to_string(vertex+1) + "," + std::to_string(e) + "," + std::to_string(n) + ")" ;
                         counter_clause += count_clause1 + " 0\n";
                         if(clause_map.find(count_clause1) == clause_map.end()){
                             clause_map[count_clause1] = num_var;
+                            rev_clause_map[num_var] = count_clause1;
                             num_var++;
                         }
                         // writing temp clause
@@ -190,34 +194,34 @@ std::tuple <bool, std::vector<CMSat::lbool>> create_encoding(Graph &graph, int m
                         temp_clause.clear();
                     }
 
-                    if(n == max_cutwidth){
+                    else if(n >= max_cutwidth){
                         assume = "C(" + std::to_string(vertex+1) + "," + std::to_string(e) + "," + std::to_string(n) + ")";
-                        //std::cout << "Assume: " << assume << std::endl;
+
                         if(clause_map.find(assume) == clause_map.end()){
                             clause_map[assume] = num_var;
+                            rev_clause_map[num_var] = assume;
                             num_var++;
                         }
                         assumptions.push_back(CMSat::Lit(clause_map[assume], true));
                     }
                     
-                    if((vertex != i && vertex != j->vertex) ){
                     
-                    //std::cout << "Iterating Vertex " << vertex + 1 << " Edge number " << e << " iteration " << n+1 << " from " << i+1 << " to " << j->vertex + 1 << std::endl;
-                    //counter_clause += "Iterating Vertex " + std::to_string(vertex + 1) + " Edge number" + std::to_string(e) + " from " + std::to_string(i+1) + " to " + std::to_string(j->vertex + 1) + "\n"; 
 
-                    
+                    if((vertex != i && vertex != j->vertex) ){
                         count_clause1 = "C(" + std::to_string(vertex+1) + "," + std::to_string(e) + "," + std::to_string(n) + ")";
                         count_clause2 = "O(" + std::to_string(i+1) + "," + std::to_string(vertex+1) + ")";
                         count_clause3 = "O(" + std::to_string(vertex+1) + "," + std::to_string(i+1) + ")";
                         count_clause4 = "O(" + std::to_string(vertex+1) + "," + std::to_string((j->vertex)+1) + ")";
                         count_clause5 = "O(" + std::to_string((j->vertex)+1) + "," + std::to_string(vertex+1) + ")";
-                        count_clause6 = "C(" + std::to_string(vertex+1) + "," + std::to_string(e+1) + "," + std::to_string(n+1) + ")";
+                        count_clause6 = "C(" + std::to_string(vertex+1) + "," + std::to_string(e+1) + "," + std::to_string(n+1) + ")" ;
                         if(clause_map.find(count_clause1) == clause_map.end()){
                             clause_map[count_clause1] = num_var;
+                            rev_clause_map[num_var] = count_clause1;
                             num_var++;
                         }
                         if(clause_map.find(count_clause6) == clause_map.end()){
                             clause_map[count_clause6] = num_var;
+                            rev_clause_map[num_var] = count_clause6;
                             num_var++;
                         }
 
@@ -232,7 +236,7 @@ std::tuple <bool, std::vector<CMSat::lbool>> create_encoding(Graph &graph, int m
                         temp_clause.push_back(CMSat::Lit(clause_map[count_clause2], true));
                         temp_clause.push_back(CMSat::Lit(clause_map[count_clause4], true));
                         temp_clause.push_back(CMSat::Lit(clause_map[count_clause6], false));
-
+ 
                         // pushing temp clause to clauses
                         clauses.push_back(temp_clause);
                         temp_clause.clear();
@@ -254,24 +258,27 @@ std::tuple <bool, std::vector<CMSat::lbool>> create_encoding(Graph &graph, int m
                         
                         num_clauses+= 2;
                     }else if (vertex != j->vertex) {
+                        
                         //std::cout << "Iterating Vertex- " << vertex + 1 << " Edge number " << e << " iteration " << n+1 << " from " << i+1 << " to " << j->vertex + 1 << std::endl;
                         
                         
                         count_clause1 = "C(" + std::to_string(vertex+1) + "," + std::to_string(e) + "," + std::to_string(n) + ")";
-                        count_clause2 = "O(" + std::to_string(i+1) + "," + std::to_string(vertex+1) + ")";
+                        count_clause2 = "O(" + std::to_string(vertex+1) + "," + std::to_string(vertex+1) + ")";
                         count_clause3 = "O(" + std::to_string(vertex+1) + "," + std::to_string((j->vertex)+1) + ")";
-                        count_clause4 = "C(" + std::to_string(vertex+1) + "," + std::to_string(e+1) + "," + std::to_string(n+1) + ")";
+                        count_clause4 = "C(" + std::to_string(vertex+1) + "," + std::to_string(e+1) + "," + std::to_string(n+1) + ")" ;
                         if(clause_map.find(count_clause1) == clause_map.end()){
                             clause_map[count_clause1] = num_var;
+                            rev_clause_map[num_var] = count_clause1;   
                             num_var++;
                         }
                         if(clause_map.find(count_clause4) == clause_map.end()){
                             clause_map[count_clause4] = num_var;
+                            rev_clause_map[num_var] = count_clause4;
                             num_var++;
                         }
 
-                        // Only check if the edge starts on the right side of the vertex and ends on it
-                        counter_clause += "--C" + std::to_string(vertex+1) + std::to_string(e) + std::to_string(n) + 
+                        
+                        counter_clause += "-C" + std::to_string(vertex+1) + std::to_string(e) + std::to_string(n) + 
                                         " -O" + std::to_string(i+1) + std::to_string(vertex+1) + 
                                         " -O" + std::to_string(vertex+1) + std::to_string((j->vertex)+1) + 
                                         " C" + std::to_string(vertex+1) + std::to_string(e+1) + std::to_string(n+1) + " 0\n";
@@ -287,36 +294,72 @@ std::tuple <bool, std::vector<CMSat::lbool>> create_encoding(Graph &graph, int m
                         temp_clause.clear();
 
                         num_clauses++;
-                    }
-                }
+                    } 
                 
-                 
-            }   e++;              
+
+                      
+                    count_clause1 = "C(" + std::to_string(vertex+1) + "," + std::to_string(e) + "," + std::to_string(n) + ")";
+                    count_clause4 = "C(" + std::to_string(vertex+1) + "," + std::to_string(e+1) + "," + std::to_string(n) + ")";
+                    if(clause_map.find(count_clause1) == clause_map.end()){
+                        clause_map[count_clause1] = num_var;
+                        rev_clause_map[num_var] = count_clause1;   
+                        num_var++;
+                    }
+                    if(clause_map.find(count_clause4) == clause_map.end()){
+                        clause_map[count_clause4] = num_var;
+                        rev_clause_map[num_var] = count_clause4;
+                        num_var++;
+                    }
+
+                    counter_clause += "-C" + std::to_string(vertex+1) + std::to_string(e) + std::to_string(n) + 
+                                    " C" + std::to_string(vertex+1) + std::to_string(e+1) + std::to_string(n) + " 0\n";
+
+                    //writing temp clause
+                    temp_clause.push_back(CMSat::Lit(clause_map[count_clause1], true));
+                    temp_clause.push_back(CMSat::Lit(clause_map[count_clause4], false));
+
+                    // pushing temp clause to clauses
+                    clauses.push_back(temp_clause);
+                    temp_clause.clear();
+
+                    num_clauses++;
+
+                    
+                
+                }
+               e++;
+            }              
         }
     }
     
 
     solver.set_num_threads(4);
-    solver.new_vars(num_var+1);
+    solver.new_vars(num_var);
 
     for(auto clause : clauses){
-        //std::cout << "Adding clause: "<< clause << std::endl;
         solver.add_clause(clause);
-    }
+    } 
 
-    //std::cout << "Number of variables: " << num_var+1 << std::endl;
-    //std::cout << "Number of clauses: " << num_clauses << std::endl; 
-
+    write_clause_map(clause_map);
 
 
     CMSat::lbool ret = solver.solve(&assumptions);
+
     if(ret == CMSat::l_True){
-        //std::cout << "SAT" << std::endl;
+        std::cout << "SAT" << std::endl;
         std::vector<CMSat::lbool> model = solver.get_model();
+        for(int i = 0; i < model.size(); i++){
+            if(model[i] == CMSat::l_True){
+                //std::cout<<"True "<< rev_clause_map[i] << std::endl;
+                //std::cout<< counter_clause << std::endl;
+            }
+        }
+
         return std::make_tuple(true, model);
     }else if(ret == CMSat::l_False){
+        std::cout << "UNSAT" << std::endl;
         return std::make_tuple(false, std::vector<CMSat::lbool>());
-        //std::cout << "UNSAT" << std::endl;
+        
         
     }
 
@@ -328,7 +371,7 @@ std::tuple <bool, std::vector<CMSat::lbool>> create_encoding(Graph &graph, int m
     + "\n";
     std::string encoding = comment + header + self_clause + transitive_clause + anti_reflixive_clause + counter_clause;
     write_encoding(encoding);
-    write_clause_map(clause_map);
+    
 
 }
 
@@ -384,16 +427,33 @@ std::string find_cutwidth(Graph &graph, int timeout){
             lower = mid + 1;
             mid = (lower + upper)/2;
         }
-        std::cout << "After Lower: " << lower << std::endl;
-        std::cout << "After Upper: " << upper << std::endl;
-        std::cout << "After Mid: " << mid << std::endl;
     }
-    output = "Cutwidth: " + std::to_string(mid) + "\n";
+    output = "\nCutwidth: " + std::to_string(mid-1) + "\n";
+
+    
+    std::unordered_map <int, int> order_map = {};
     for(int i=0; i < model.size(); i++){
-        if(model[i] == CMSat::l_False){
-            for (auto it = clause_map.begin(); it != clause_map.end(); ++it) {
-                if (it->second == i && it->first[0] == 'O') output += it->first + "\n";
-            } 
+        if(model[i] == CMSat::l_True){
+            //std::cout<<"True "<< rev_clause_map[i] << std::endl;
+            std::string clause = rev_clause_map[i];
+            if(clause[0] == 'O') {
+                std::string delimiter = ",";
+                std::string token = clause.substr(2, clause.find(delimiter));
+                int vertex = std::stoi(token);
+                token = clause.substr(clause.find(delimiter)+1, clause.find(")")-clause.find(delimiter)-1);
+                int vertex2 = std::stoi(token);
+                if(vertex != vertex2){
+                    order_map[vertex] = order_map[vertex] + 1;
+                }
+            }
+        }
+    }
+
+    for(int i=0; i< graph.num_vertices; i++){
+        for(int j =1; j<= graph.num_vertices; j++){
+            if(order_map[j] == i){
+                output +=  std::to_string(j) + " ";
+            }
         }
     }
 
