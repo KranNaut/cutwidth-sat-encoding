@@ -1,0 +1,11 @@
+[submodule "external/cadiback"]
+	path = external/cadiback
+	url = git@github.com:meelgroup/cadiback.git
+	branch = synthesis
+[submodule "external/cadical"]
+	path = external/cadical
+	url = https://github.com/meelgroup/cadical.git
+	branch = add_dynamic_lib
+[submodule "external/cryptominisat"]
+	path = external/cryptominisat
+	url = git@github.com:msoos/cryptominisat.git
