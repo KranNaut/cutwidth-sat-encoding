@@ -11,10 +11,11 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 
 include(AddGitSubmodule)
 set(DSTATICCOMPILE ON CACHE BOOL "Cryptominisat Statically linked libs")
-set(DIPASIR ON CACHE BOOL "Build Cryptominisat Interface")
+set(DIPASIR OFF CACHE BOOL "Build Cryptominisat Interface")
 add_git_submodule(external/cryptominisat)
 
 set(EXECUTABLE_NAME "Cutwidth")
+message("Executable set")
 
 add_subdirectory(src)
 add_subdirectory(app)

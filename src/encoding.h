@@ -6,7 +6,7 @@
 #include <tuple>
 #include <unordered_map>
 #include "read_graph.h"
-#include <cryptominisat5/cryptominisat.h>
+#include <cryptominisat.h>
 #include <assert.h>
 #include <vector>
 

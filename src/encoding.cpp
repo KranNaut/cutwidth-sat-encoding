@@ -1,14 +1,10 @@
 #include "encoding.h"
-
-
-
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <ctime>
-#include <cryptominisat5/cryptominisat.h>
+#include <cryptominisat.h>
 #include <assert.h>
-#include <vector>
 
 
 void write_encoding(std::string clause) {
